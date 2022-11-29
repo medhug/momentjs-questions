@@ -100,12 +100,12 @@ function differenceBetweenTwoDates(date1, time1, date2, time2) {
   // first reverse order
   let A = moment(
     date1,
-    ["MM/DD/YYYY", "DD/MM/YYYY", "QQ of YYYY", "ddd, DD MMM YYYY"],
+    ["MM/DD/YYYY", "DD/MM/YYYY", "ddd, DD MMM YYYY"],
     true
   ).format("YYYY-MM-DD");
   let B = moment(
     date2,
-    ["MM/DD/YYYY", "DD/MM/YYYY", "QQ of YYYY", "ddd, DD MMM YYYY"],
+    ["MM/DD/YYYY", "DD/MM/YYYY", "ddd, DD MMM YYYY"],
     true
   ).format("YYYY-MM-DD");
 
@@ -116,12 +116,19 @@ function differenceBetweenTwoDates(date1, time1, date2, time2) {
   let dateAndTime1 = moment(A, moment.ISO_8601);
   let dateAndTime2 = moment(B, moment.ISO_8601);
 
-  console.log(dateAndTime1);
-  console.log(dateAndTime2);
+  // second argument in diff returns truncated unit, true as third returns floating
+  let difference = dateAndTime2.diff(dateAndTime1);
+  let tempTime = moment.duration(difference);
 
-  let difference = dateAndTime1.diff(dateAndTime2);
-  console.log(difference);
-  return difference;
+  let years = tempTime.years();
+  let months = tempTime.months();
+  let days = tempTime.days();
+  let hours = tempTime.hours();
+  let minutes = tempTime.minutes();
+
+  let answer = `${years} Years, ${months} Months, ${days} Days, ${hours} Hours, and ${minutes} Minutes`;
+  console.log(answer);
+  return answer;
 }
 
 let inputDate = "04/13/2022";
