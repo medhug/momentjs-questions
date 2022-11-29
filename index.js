@@ -92,10 +92,10 @@ function getLastMondayOfYear(year) {
 /*
 QUESTION 4
 Given two dates and two time markers, write a function to find the difference between the two dates in the following format:
-""
+"X Years, X Months, X Days, X Hours, and X Minutes"
 */
 function differenceBetweenTwoDates(date1, time1, date2, time2) {
-  // may get unexpected results when parsing both date and time
+  // may get unexpected results when parsing both date and time, according to docs
   // solution to build to ISO 8601 format for consistent input into moment function
   // first reverse order
   let A = moment(
@@ -131,8 +131,58 @@ function differenceBetweenTwoDates(date1, time1, date2, time2) {
   return answer;
 }
 
+/*
+QUESTION 5
+Write a function to generate two random dates and returns the date that is closest to right now.
+*/
+function closestToNow() {
+  let now = moment([]);
+
+  function randomDate() {
+    // date must be a real date so best to start from a real date and move randomly away.
+    // generating random number sets can lead to dates that dont exist like June 31st
+    // first, generate random year between 1968-2068 (two digit YY limits)
+    let year = Math.floor(Math.random() * (2068 - 1968) + 1968);
+    year = year.toString();
+    let day = Math.floor(Math.random() * (365 - 1) + 1);
+    day = day.toString();
+    let dateFirstPass = moment(year);
+    // can add .format("L") to end of secondpass for formatting
+    let dateSecondPass = moment(dateFirstPass).add(day, "days");
+    console.log("random date: ", dateSecondPass.format("L"));
+    return dateSecondPass;
+  }
+
+  let A = randomDate();
+  let B = randomDate();
+
+  let diffA = now.diff(A);
+  let diffB = now.diff(B);
+  // postprocessing negative values
+  if (diffA < 0) {
+    diffA = diffA * -1;
+  }
+  if (diffB < 0) {
+    diffB = diffB * -1;
+  }
+  // find smallest
+  if (diffA < diffB) {
+    console.log(A.format("L"), "is closer to Now");
+    return A;
+  }
+  if (diffB < diffA) {
+    console.log(B.format("L"), "is closer to Now");
+    return B;
+  }
+}
+
+// input for question 1
 let inputDate = "04/13/2022";
+
+// input for questions 2 & 3
 let year = 2023;
+
+// input for question 4
 let date1 = "03/01/2022";
 let time1 = "13:03";
 let date2 = "03/01/2022";
@@ -142,3 +192,4 @@ formatAnyInputToStandardDate(inputDate);
 getFirstMondayOfYear(year);
 getLastMondayOfYear(year);
 differenceBetweenTwoDates(date1, time1, date2, time2);
+closestToNow();
