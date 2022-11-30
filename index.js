@@ -1,30 +1,30 @@
 import moment from "moment";
 import "moment-timezone";
 
-function someLessonsLearned() {
-  // empty brackets to get current date. creates a moment (mutable) object
-  let now = moment([]);
+// function someLessonsLearned() {
+//   // empty brackets to get current date. creates a moment (mutable) object
+//   // let now = moment([]);
 
-  // clone the original before performing date math
-  let oneWeekLater = now.clone().add(1, "week");
+//   // clone the original before performing date math
+//   // let oneWeekLater = now.clone().add(1, "week");
 
-  // date and time math are different
-  // one date may not be 24 hours, one year may not be 365 days
+//   // date and time math are different
+//   // one date may not be 24 hours, one year may not be 365 days
 
-  // A UTC offset is a value that represents how far a particular dates and time is from UTC.
-  // a time zone usually has more than one offset. therefore, it is impossible to infer a timezone from just an offset value.
+//   // A UTC offset is a value that represents how far a particular dates and time is from UTC.
+//   // a time zone usually has more than one offset. therefore, it is impossible to infer a timezone from just an offset value.
 
-  // to use the date as a UTC date use moment.utc
-  let c = moment.utc("13/02/2022", "DD/MM/YYYY", true).format();
-}
+//   // to use the date as a UTC date use moment.utc
+//   let c = moment.utc("13/02/2022", "DD/MM/YYYY", true).format();
+// }
 
-someLessonsLearned();
+// someLessonsLearned();
 
 /* QUESTION 1
 Given the following strings:
-"13/02/2022", check
-"03/04/2022", check
-"Q3 of 2021",
+"13/02/2022"
+"03/04/2022"
+"Q3 of 2021"
 "Tue, 22 Feb 2022"
 
 Write a function to display each date in standard "mm/dd/yyyy" format
@@ -43,17 +43,39 @@ function formatAnyInputToStandardDate(input) {
 
   let entry = moment(
     input,
-    ["MM/DD/YYYY", "DD/MM/YYYY", "QQ of YYYY", "ddd, DD MMM YYYY"],
+    ["MM/DD/YYYY", "DD/MM/YYYY", "ddd, DD MMM YYYY"],
     true
   );
 
-  if (entry != "Invalid date") {
-    console.log("entered date:", entry.format("MM/DD/YYYY"));
-    return entry;
+  let extractedQuarter;
+  let extractedYear;
+  let q1 = "Q1 of ";
+  let q2 = "Q2 of ";
+  let q3 = "Q3 of ";
+  let q4 = "Q4 of ";
+
+  if (!entry.isValid()) {
+    if (input.includes(q1)) {
+      extractedQuarter = "01/01/";
+      extractedYear = input.replace(q1, "");
+    }
+    if (input.includes(q2)) {
+      extractedQuarter = "04/01/";
+      extractedYear = input.replace(q2, "");
+    }
+    if (input.includes(q3)) {
+      extractedQuarter = "07/01/";
+      extractedYear = input.replace(q3, "");
+    }
+    if (input.includes(q4)) {
+      extractedQuarter = "10/01/";
+      extractedYear = input.replace(q4, "");
+    }
+    let result = extractedQuarter + extractedYear;
+    entry = moment(result, "MM/DD/YYYY", true);
   }
-  if (entry === "Invalid date") {
-    console.log("fix Q submissions");
-  }
+
+  console.log("entered date:", entry.format("MM/DD/YYYY"));
 }
 
 /* QUESTION 2
@@ -374,7 +396,7 @@ function getWeekOfYear(date) {
 // ------------------------------
 
 // input for question 1
-let inputDate = "04/13/2022";
+let inputDate = "Q2 of 2025";
 
 // input for questions 2 & 3
 let year = 2020;
@@ -410,8 +432,8 @@ let date = "02/15/2022";
 // getLastMondayOfYear(year);
 // differenceBetweenTwoDates(date1, time1, date2, time2);
 // closestToNow();
-countdownInMiami(timeToYear);
-countdownInQatar(timeToYear);
+// countdownInMiami(timeToYear);
+// countdownInQatar(timeToYear);
 // timezoneHourDifference(dateAndTime, timezone1, timezone2);
 // getAllSpecificDays(yearToFind, monthToFind, dayToFind);
 // getWeekOfYear(date);
