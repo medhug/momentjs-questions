@@ -41,17 +41,17 @@ function formatAnyInputToStandardDate(input) {
   // strict mode is set by passing true as third parameter.
   // use an array in the second parameter will try to match input
 
-  let b = moment(
+  let entry = moment(
     input,
     ["MM/DD/YYYY", "DD/MM/YYYY", "QQ of YYYY", "ddd, DD MMM YYYY"],
     true
-  ).format("MM/DD/YYYY");
+  );
 
-  if (b != "Invalid date") {
-    console.log(b); // results in a date in the context of the users local time
-    return b;
+  if (entry != "Invalid date") {
+    console.log("entered date:", entry.format("MM/DD/YYYY"));
+    return entry;
   }
-  if (b === "Invalid date") {
+  if (entry === "Invalid date") {
     console.log("fix Q submissions");
   }
 }
@@ -302,6 +302,49 @@ function getAllSpecificDays(year, month, dayOfWeek) {
   return daysFoundArray;
 }
 
+/* QUESTION 10
+Imagine that the world was different and the first day of the year is March 1st. Given a date, write a function to return which week of the year it is.
+*/
+
+function getWeekOfYear(date) {
+  // validate multiple date input formats
+  let entry = formatAnyInputToStandardDate(date);
+
+  let extractedYear = moment(entry).year();
+  extractedYear = extractedYear.toString();
+
+  let newStartOfYear = "03/01/" + extractedYear;
+  // let formerStartOfYear = "01/01/" + extractedYear;
+  let formerEndOfYear = "12/01/" + extractedYear;
+  let entryInNextYear = entry.clone().add(1, "year");
+
+  let A = moment(newStartOfYear, "MM/DD/YYYY", true);
+  let B = moment(entry);
+  let C = moment(formerEndOfYear, "MM/DD/YYYY", true);
+  // let D = moment(formerStartOfYear, "MM/DD/YYYY", true);
+  let E = moment(entryInNextYear, "MM/DD/YYYY", true);
+
+  let difference = B.diff(A, "weeks");
+
+  // for positive difference, weeks are done
+  if (difference >= 0) {
+    console.log("In week #", difference);
+    return difference;
+  }
+  // for negative difference:
+  // add weeks from new start to standard end:
+  // add weeks from standard start(of next year) to date entered(of the next year)
+  // next year is important to keep correct calendar moving forward
+
+  if (difference < 0) {
+    let fromMarchToNewYears = C.diff(A, "weeks");
+    let fromNewYearsToEntryNextYear = E.diff(C, "weeks");
+    let difference2 = fromMarchToNewYears + fromNewYearsToEntryNextYear;
+    console.log("In week #", difference2);
+    return difference2;
+  }
+}
+
 // ------------------------------
 
 // input for question 1
@@ -329,6 +372,9 @@ let yearToFind = 2022;
 let monthToFind = 11;
 let dayToFind = "Thursday";
 
+// input for question 10
+let date = "02/15/2022";
+
 // ----------------------------
 
 // uncomment the following functions individually to run
@@ -341,4 +387,5 @@ let dayToFind = "Thursday";
 // countdownInMiami(timeToYear);
 // countdownInQatar(timeToYear);
 // timezoneHourDifference(dateAndTime, timezone1, timezone2);
-getAllSpecificDays(yearToFind, monthToFind, dayToFind);
+// getAllSpecificDays(yearToFind, monthToFind, dayToFind);
+// getWeekOfYear(date);
