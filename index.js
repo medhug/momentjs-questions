@@ -69,7 +69,9 @@ function getFirstMondayOfYear(year) {
   let firstDay = "01/01/" + yearInStringFormat;
   let dayFound = moment(firstDay, "MM/DD/YYYY", true);
 
-  let firstMonday = moment(dayFound).day(1 + 7).format("LLLL");
+  let firstMonday = moment(dayFound)
+    .day(1 + 7)
+    .format("LLLL");
   console.log("first Monday is: ", firstMonday);
   return firstMonday;
 }
@@ -256,13 +258,57 @@ function timezoneHourDifference(dateAndTime, zone1, zone2) {
   return difference;
 }
 
+/* QUESTION 9
+
+*/
+function getAllSpecificDays(year, month, dayOfWeek) {
+  // validates user input type
+  let yearInStringFormat;
+  if (typeof year != "string") {
+    yearInStringFormat = year.toString();
+  }
+  let monthInStringFormat;
+  if (typeof month != "string") {
+    monthInStringFormat = month.toString();
+    if (monthInStringFormat.length < 2) {
+      monthInStringFormat = "0" + monthInStringFormat;
+    }
+  }
+
+  let firstDayBuild = monthInStringFormat + "/01/" + yearInStringFormat;
+  let firstDayOfMonth = moment(firstDayBuild, "MM/DD/YYYY", true);
+  console.log(firstDayOfMonth.format("LLLL"));
+
+  let daysFoundArray = [];
+  let dayID;
+  let dictionary = {
+    Sunday: 0,
+    Monday: 1,
+    Tuesday: 2,
+    Wednesday: 3,
+    Thursday: 4,
+    Friday: 5,
+    Saturday: 6,
+  };
+  dayID = dictionary[dayOfWeek];
+
+  while (dayID <= 31) {
+    let foundDay = moment(firstDayOfMonth).day(dayID).format("L");
+    daysFoundArray.push(foundDay);
+    dayID = dayID + 7;
+  }
+
+  console.log("The array has: ", daysFoundArray);
+  return daysFoundArray;
+}
+
 // ------------------------------
 
 // input for question 1
 let inputDate = "04/13/2022";
 
 // input for questions 2 & 3
-let year = 2021;
+let year = 2020;
 
 // input for question 4
 let date1 = "03/01/2022";
@@ -278,15 +324,21 @@ let dateAndTime = "03/02/2022 03:45pm";
 let timezone1 = "America/Los_Angeles";
 let timezone2 = "Asia/Shanghai";
 
+// input for question 9
+let yearToFind = 2022;
+let monthToFind = 3;
+let dayToFind = "Tuesday";
+
 // ----------------------------
 
 // uncomment the following functions individually to run
 
 // formatAnyInputToStandardDate(inputDate);
-getFirstMondayOfYear(year);
-getLastMondayOfYear(year);
+// getFirstMondayOfYear(year);
+// getLastMondayOfYear(year);
 // differenceBetweenTwoDates(date1, time1, date2, time2);
 // closestToNow();
 // countdownInMiami(timeToYear);
 // countdownInQatar(timeToYear);
 // timezoneHourDifference(dateAndTime, timezone1, timezone2);
+getAllSpecificDays(yearToFind, monthToFind, dayToFind);
