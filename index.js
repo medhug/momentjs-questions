@@ -259,8 +259,9 @@ function timezoneHourDifference(dateAndTime, zone1, zone2) {
 }
 
 /* QUESTION 9
-
+Given a year, month, and day-of-week, write a function to return all day-of-week of that month.
 */
+
 function getAllSpecificDays(year, month, dayOfWeek) {
   // validates user input type
   let yearInStringFormat;
@@ -277,7 +278,6 @@ function getAllSpecificDays(year, month, dayOfWeek) {
 
   let firstDayBuild = monthInStringFormat + "/01/" + yearInStringFormat;
   let firstDayOfMonth = moment(firstDayBuild, "MM/DD/YYYY", true);
-  console.log(firstDayOfMonth.format("LLLL"));
 
   let daysFoundArray = [];
   let dayID;
@@ -298,7 +298,7 @@ function getAllSpecificDays(year, month, dayOfWeek) {
     dayID = dayID + 7;
   }
 
-  console.log("The array has: ", daysFoundArray);
+  console.log(daysFoundArray);
   return daysFoundArray;
 }
 
@@ -326,8 +326,8 @@ let timezone2 = "Asia/Shanghai";
 
 // input for question 9
 let yearToFind = 2022;
-let monthToFind = 3;
-let dayToFind = "Tuesday";
+let monthToFind = 11;
+let dayToFind = "Thursday";
 
 // ----------------------------
 
