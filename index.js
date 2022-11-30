@@ -76,6 +76,7 @@ function formatAnyInputToStandardDate(input) {
   }
 
   console.log("entered date:", entry.format("MM/DD/YYYY"));
+  return entry;
 }
 
 /* QUESTION 2
@@ -255,7 +256,7 @@ function countdownInMiami(input) {
   let adjustedCountdown = countdown.add(offset, "hours");
 
   console.log("Miami is: ");
-  processCountdown(adjustedCountdown);
+  return processCountdown(adjustedCountdown);
 }
 
 /* QUESTION 7
@@ -288,7 +289,7 @@ function countdownInQatar(input) {
   let adjustedCountdown = countdown.subtract(offset, "hours");
 
   console.log("Qatar is: ");
-  processCountdown(adjustedCountdown);
+  return processCountdown(adjustedCountdown);
 }
 
 /* QUESTION 8
@@ -362,14 +363,12 @@ function getWeekOfYear(date) {
   extractedYear = extractedYear.toString();
 
   let newStartOfYear = "03/01/" + extractedYear;
-  // let formerStartOfYear = "01/01/" + extractedYear;
   let formerEndOfYear = "12/01/" + extractedYear;
   let entryInNextYear = entry.clone().add(1, "year");
 
   let A = moment(newStartOfYear, "MM/DD/YYYY", true);
   let B = moment(entry);
   let C = moment(formerEndOfYear, "MM/DD/YYYY", true);
-  // let D = moment(formerStartOfYear, "MM/DD/YYYY", true);
   let E = moment(entryInNextYear, "MM/DD/YYYY", true);
 
   let difference = B.diff(A, "weeks");
