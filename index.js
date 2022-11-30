@@ -1,4 +1,5 @@
 import moment from "moment";
+import "moment-timezone";
 
 function someLessonsLearned() {
   // empty brackets to get current date. creates a moment (mutable) object
@@ -19,8 +20,7 @@ function someLessonsLearned() {
 
 someLessonsLearned();
 
-/*
-QUESTION 1
+/* QUESTION 1
 Given the following strings:
 "13/02/2022", check
 "03/04/2022", check
@@ -56,8 +56,7 @@ function formatAnyInputToStandardDate(input) {
   }
 }
 
-/*
-QUESTION 2
+/* QUESTION 2
 Given a year, write a function to get the first monday of the year in standard "mm/dd/yyyy" format
 */
 
@@ -70,13 +69,14 @@ function getFirstMondayOfYear(year) {
   let firstDay = "01/01/" + yearInStringFormat;
   let dayFound = moment(firstDay, "MM/DD/YYYY", true);
   let weekday = dayFound.clone().format("ddd, MM DD YYYY");
-  console.log(weekday);
+  console.log("first day", dayFound);
+  console.log("first Monday", moment(dayFound).day(1 + 7));
 }
 
-/*
-QUESTION 3
+/* QUESTION 3
 Given a year, write a function to get the last monday of the year in standard "mm/dd/yyyy" format
 */
+
 function getLastMondayOfYear(year) {
   // validates user input type
   let yearInStringFormat;
@@ -86,14 +86,15 @@ function getLastMondayOfYear(year) {
   let lastDay = "12/31/" + yearInStringFormat;
   let dayFound = moment(lastDay, "MM/DD/YYYY", true);
   let weekday = dayFound.clone().format("ddd, MM DD YYYY");
-  console.log(weekday);
+  console.log("last day", dayFound);
+  console.log("last Monday", moment(dayFound).day(1 - 7));
 }
 
-/*
-QUESTION 4
+/* QUESTION 4
 Given two dates and two time markers, write a function to find the difference between the two dates in the following format:
 "X Years, X Months, X Days, X Hours, and X Minutes"
 */
+
 function differenceBetweenTwoDates(date1, time1, date2, time2) {
   // may get unexpected results when parsing both date and time, according to docs
   // solution to build to ISO 8601 format for consistent input into moment function
@@ -131,10 +132,10 @@ function differenceBetweenTwoDates(date1, time1, date2, time2) {
   return answer;
 }
 
-/*
-QUESTION 5
+/* QUESTION 5
 Write a function to generate two random dates and returns the date that is closest to right now.
 */
+
 function closestToNow() {
   let now = moment([]);
 
@@ -176,11 +177,90 @@ function closestToNow() {
   }
 }
 
+/* QUESTION 6
+Write a function that would return the months, days, hours, minutes, and seconds until the beginning of the year in Miami
+*/
+
+function absoluteCountdown(year) {
+  // first, find time to new year from UTC for absolute time
+  let now = moment.utc([]);
+  let newYears = moment.utc(year, "YYYY");
+
+  let difference = newYears.diff(now);
+  let tempTime = moment.duration(difference);
+
+  return tempTime;
+}
+function processCountdown(input) {
+  let years = input.years();
+  let months = input.months();
+  let days = input.days();
+  let hours = input.hours();
+  let minutes = input.minutes();
+
+  let answer = `${years} Years, ${months} Months, ${days} Days, ${hours} Hours, and ${minutes} Minutes`;
+  console.log(answer);
+  return answer;
+}
+
+function countdownInMiami(input) {
+  // first, find absolute countdown
+  let countdown = absoluteCountdown(input);
+
+  // second, include offset from UTC of miami
+  // caution: A time zone can not be represented solely by an offset from UTC
+  // may use IANA/Olson time zone database
+  // miami is 5 hours behind UTC in standard, 4 hours in daylight saving (depending on calendar date)
+
+  let adjustedCountdown = countdown.add(5, "hours");
+
+  console.log("Miami is: ");
+  processCountdown(adjustedCountdown);
+}
+
+/* QUESTION 7
+Write a function that would return the months, days, hours, minutes, and seconds until the beginning of the year in Qatar
+*/
+
+function countdownInQatar(input) {
+  // first, find absolute countdown
+  let countdown = absoluteCountdown(input);
+
+  // second, include offset from UTC of qatar
+  // Qatar is 3 hours ahead of UTC, no daylight saving
+
+  // find qatar time zone
+  let list = moment.tz.names();
+  console.log(list.includes("Qatar"));
+  //   let timeInQatar = moment.tz(input, "Arabian/Qatar");
+  let adjustedCountdown = countdown.subtract(3, "hours");
+
+  console.log("Qatar is: ");
+  processCountdown(adjustedCountdown);
+}
+
+/* QUESTION 8
+Given a date and two timezones write a function to return the hour difference between the timezones.
+*/
+
+function timezoneHourDifference(dateAndTime, zone1, zone2) {
+  let A = moment.tz(dateAndTime, "MM/DD/YYYY hh:mmA", timezone1);
+  console.log("time in: ", zone1, A);
+  let B = moment.tz(dateAndTime, "MM/DD/YYYY hh:mmA", timezone2);
+  console.log("time in: ", zone2, B);
+
+  let difference = A.diff(B, "hours");
+  console.log(difference, "hours");
+  return difference;
+}
+
+// ------------------------------
+
 // input for question 1
 let inputDate = "04/13/2022";
 
 // input for questions 2 & 3
-let year = 2023;
+let year = 2022;
 
 // input for question 4
 let date1 = "03/01/2022";
@@ -188,8 +268,23 @@ let time1 = "13:03";
 let date2 = "03/01/2022";
 let time2 = "15:04";
 
-formatAnyInputToStandardDate(inputDate);
+// input for questions 6 & 7
+let timeToYear = "2026";
+
+// input for question 8
+let dateAndTime = "03/02/2022 03:45pm";
+let timezone1 = "America/Los_Angeles";
+let timezone2 = "Asia/Shanghai";
+
+// ----------------------------
+
+// uncomment the following functions individually to run
+
+// formatAnyInputToStandardDate(inputDate);
 getFirstMondayOfYear(year);
 getLastMondayOfYear(year);
-differenceBetweenTwoDates(date1, time1, date2, time2);
-closestToNow();
+// differenceBetweenTwoDates(date1, time1, date2, time2);
+// closestToNow();
+// countdownInMiami(timeToYear);
+// countdownInQatar(timeToYear);
+// timezoneHourDifference(dateAndTime, timezone1, timezone2);
