@@ -213,10 +213,24 @@ function countdownInMiami(input) {
 
   // second, include offset from UTC of miami
   // caution: A time zone can not be represented solely by an offset from UTC
-  // may use IANA/Olson time zone database
+  // may use IANA/Olson time zone database or moment-timezone package
   // miami is 5 hours behind UTC in standard, 4 hours in daylight saving (depending on calendar date)
 
-  let adjustedCountdown = countdown.add(5, "hours");
+  // find miami time zone. need sift for a match
+  let foundTimeZone;
+  let list = moment.tz.names();
+  list.forEach((element) => {
+    let item = "Miami";
+    if (element.includes(item)) {
+      foundTimeZone = element;
+    }
+  });
+
+  let timeInMiami = moment.tz(input, foundTimeZone);
+  let offset = timeInMiami.utcOffset();
+  offset = offset / 60;
+
+  let adjustedCountdown = countdown.add(offset, "hours");
 
   console.log("Miami is: ");
   processCountdown(adjustedCountdown);
@@ -233,11 +247,23 @@ function countdownInQatar(input) {
   // second, include offset from UTC of qatar
   // Qatar is 3 hours ahead of UTC, no daylight saving
 
-  // find qatar time zone
+  // find qatar time zone. need sift for a match
+  let foundTimeZone;
   let list = moment.tz.names();
-  console.log(list.includes("Qatar"));
-  //   let timeInQatar = moment.tz(input, "Arabian/Qatar");
-  let adjustedCountdown = countdown.subtract(3, "hours");
+  list.forEach((element) => {
+    let item = "Qatar";
+    if (element.includes(item)) {
+      foundTimeZone = element;
+    }
+  });
+
+  let timeInQatar = moment.tz(input, foundTimeZone);
+
+  // offset in minutes
+  let offset = timeInQatar.utcOffset();
+  offset = offset / 60;
+
+  let adjustedCountdown = countdown.subtract(offset, "hours");
 
   console.log("Qatar is: ");
   processCountdown(adjustedCountdown);
@@ -384,8 +410,8 @@ let date = "02/15/2022";
 // getLastMondayOfYear(year);
 // differenceBetweenTwoDates(date1, time1, date2, time2);
 // closestToNow();
-// countdownInMiami(timeToYear);
-// countdownInQatar(timeToYear);
+countdownInMiami(timeToYear);
+countdownInQatar(timeToYear);
 // timezoneHourDifference(dateAndTime, timezone1, timezone2);
 // getAllSpecificDays(yearToFind, monthToFind, dayToFind);
 // getWeekOfYear(date);
