@@ -68,9 +68,10 @@ function getFirstMondayOfYear(year) {
   }
   let firstDay = "01/01/" + yearInStringFormat;
   let dayFound = moment(firstDay, "MM/DD/YYYY", true);
-  let weekday = dayFound.clone().format("ddd, MM DD YYYY");
-  console.log("first day", dayFound);
-  console.log("first Monday", moment(dayFound).day(1 + 7));
+
+  let firstMonday = moment(dayFound).day(1 + 7).format("LLLL");
+  console.log("first Monday is: ", firstMonday);
+  return firstMonday;
 }
 
 /* QUESTION 3
@@ -85,9 +86,10 @@ function getLastMondayOfYear(year) {
   }
   let lastDay = "12/31/" + yearInStringFormat;
   let dayFound = moment(lastDay, "MM/DD/YYYY", true);
-  let weekday = dayFound.clone().format("ddd, MM DD YYYY");
-  console.log("last day", dayFound);
-  console.log("last Monday", moment(dayFound).day(1 - 7));
+
+  let lastMonday = moment(dayFound).day(1).format("LLLL");
+  console.log("last Monday is: ", lastMonday);
+  return lastMonday;
 }
 
 /* QUESTION 4
@@ -260,7 +262,7 @@ function timezoneHourDifference(dateAndTime, zone1, zone2) {
 let inputDate = "04/13/2022";
 
 // input for questions 2 & 3
-let year = 2022;
+let year = 2021;
 
 // input for question 4
 let date1 = "03/01/2022";
